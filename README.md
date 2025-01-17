@@ -36,3 +36,42 @@ docker-compose up --build
 ```
 npm test
 ```
+
+## How to Publish an Event to the App
+Start the Services: Run the following command in the project directory to start all services:
+
+```
+docker-compose up --build
+```
+
+Publish an Event: Use a tool like curl, Postman, or any REST client to send a POST request to the /events endpoint. Here's an example using postman or curl:
+
+```
+curl -X POST http://localhost:3000/events \
+-H "Content-Type: application/json" \
+-d '{
+    "eventId": "event123",
+    "type": "score",
+    "playerId": "player456",
+    "timestamp": "2025-01-01T12:00:00Z",
+    "metadata": { "score": 1500 }
+}'
+```
+
+Replace the eventId, type, playerId, and other fields with your desired values.
+
+Verify the Event:
+
+Check the logs of the API container to confirm the event was queued successfully:
+```
+docker logs game_event_api
+```
+Check the logs of the worker container to confirm the event was processed and stored:
+```
+docker logs game_event_worker
+```
+
+# Stop the system
+```
+docker-compose down
+```

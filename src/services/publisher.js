@@ -2,8 +2,8 @@
 
 const amqp = require('amqplib');
 
-const RABBITMQ_URL = 'amqp://localhost';
-const QUEUE_NAME = 'game_events';
+const RABBITMQ_URL = `amqp://${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`;
+const QUEUE_NAME = process.env.RABBITMQ_QUEUE;
 
 async function publishEvent(event) {
     try {

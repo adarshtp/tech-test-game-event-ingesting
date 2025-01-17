@@ -8,6 +8,11 @@ services:
       - "${MONGO_PORT}:${MONGO_PORT}"
     volumes:
       - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 30s
+      retries: 10
 
   rabbitmq:
     image: rabbitmq:management
@@ -15,6 +20,11 @@ services:
     ports:
       - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"
       - '15672:15672'
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   api:
     build:
@@ -22,8 +32,8 @@ services:
     container_name: game_event_api
     ports:
       - "${APP_PORT}:${APP_PORT}"
-    environment:
-      - NODE_ENV=production
+    env_file:
+      - .env
     depends_on:
       - mongodb
       - rabbitmq
@@ -33,9 +43,13 @@ services:
     build:
       context: .
     container_name: game_event_worker
+    env_file:
+      - .env
     depends_on:
-      - mongodb
-      - rabbitmq
+      mongodb:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     command: ["node", "src/services/worker.js"]
 
 volumes:

@@ -1,12 +1,12 @@
 // app.js - Main Entry Point for API
-
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const { publishEvent } = require('./services/publisher');
 const { connectToDatabase } = require('./db/db_config');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.APP_PORT;
 
 // Middleware
 app.use(bodyParser.json());
