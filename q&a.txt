@@ -1,0 +1,38 @@
+1. What did you use for the API and why?
+
+I used Express.js, a minimal and flexible Node.js web application framework. It was chosen because:
+
+* It has a straightforward API that makes it easy to set up a RESTful service quickly.
+* It is widely supported, well-documented, and has a robust ecosystem.
+* Its middleware capability simplifies parsing JSON requests and error handling.
+
+
+2. What queue/worker system did you choose and why?
+
+I chose RabbitMQ as the queue system because:
+
+* It is a reliable message broker with broad support for message queuing patterns.
+* It has excellent support for Node.js.
+* RabbitMQ allows durable queues, message acknowledgments, and retry mechanisms, ensuring that events are processed reliably.
+* The built-in management console (accessible at port 15672) provides real-time visibility into queues and message states.
+
+
+
+
+3. What database did you use and why?
+
+I used MongoDB as the database because:
+
+* It is a document-oriented NoSQL database that handles dynamic schemas effectively, making it ideal for storing JSON-like game events.
+* It is easy to scale horizontally and works well for event-driven architectures.
+* MongoDB’s flexibility allows us to accommodate evolving event structures without schema migrations.
+
+
+
+4. What key decisions did you make about how the system is structured and why?
+
+* Decoupled Ingestion and Processing: By introducing RabbitMQ, the API server and worker are decoupled, ensuring the system can handle spikes in incoming traffic without overwhelming the database.
+* Retry Mechanism: Added retry logic in the worker to handle transient errors (e.g., database connectivity issues), ensuring robust event processing.
+* Batch Processing: Implemented batching in the worker to optimize database writes, reducing the load during high-traffic scenarios.
+* Dockerized Setup: Created a docker-compose.yml file to encapsulate all dependencies (MongoDB, RabbitMQ, and the API server), simplifying setup and deployment.
+* Scalability: The design allows scaling RabbitMQ workers independently to handle higher event ingestion rates as the system grows.
