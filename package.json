@@ -1,0 +1,25 @@
+{
+    "name": "game-event-system",
+    "version": "1.0.0",
+    "description": "A system for ingesting and processing game events using RabbitMQ and MongoDB",
+    "main": "src/app.js",
+    "scripts": {
+        "start": "node src/app.js",
+        "worker": "node src/services/worker.js",
+        "start-all": "npm run start & npm run worker",
+        "test": "node test/app.test.js"
+    },
+    "dependencies": {
+        "amqplib": "^0.10.3",
+        "body-parser": "^1.20.1",
+        "dotenv": "^16.4.7",
+        "express": "^4.18.2",
+        "mongoose": "^7.0.3"
+    },
+    "devDependencies": {
+        "chai": "^4.3.7",
+        "mocha": "^10.2.0"
+    },
+    "author": "Adarsh TP",
+    "license": "MIT"
+}

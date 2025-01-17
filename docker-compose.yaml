@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "${MONGO_PORT}:${MONGO_PORT}"
+    volumes:
+      - mongo-data:/data/db
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "${RABBITMQ_PORT}:${RABBITMQ_PORT}"
+      - '15672:15672'
+
+  api:
+    build:
+      context: .
+    container_name: game_event_api
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+      - rabbitmq
+    command: ["node", "src/app.js"]
+
+  worker:
+    build:
+      context: .
+    container_name: game_event_worker
+    depends_on:
+      - mongodb
+      - rabbitmq
+    command: ["node", "src/services/worker.js"]
+
+volumes:
+  mongo-data:
