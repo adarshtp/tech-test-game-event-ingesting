@@ -1,5 +1,4 @@
-# tech-test-game-event-ingesting
-Technical Test: Game Event Ingesting
+# Technical Test: Game Event Ingesting
 
 The following implementation covers all the specified requirements:
 
@@ -38,13 +37,18 @@ npm test
 ```
 
 ## How to Publish an Event to the App
-Start the Services: Run the following command in the project directory to start all services:
+
+### Start the Services
+
+Run the following command in the project directory to start all services:
 
 ```
 docker-compose up --build
 ```
 
-Publish an Event: Use a tool like curl, Postman, or any REST client to send a POST request to the /events endpoint. Here's an example using postman or curl:
+### Publish an Event
+
+Use a tool like curl, Postman, or any REST client to send a POST request to the /events endpoint. Here's an example using postman or curl:
 
 ```
 curl -X POST http://localhost:3000/events \
@@ -60,13 +64,16 @@ curl -X POST http://localhost:3000/events \
 
 Replace the eventId, type, playerId, and other fields with your desired values.
 
-Verify the Event:
+### Verify the Event
 
-Check the logs of the API container to confirm the event was queued successfully:
+Check the logs of the API container to confirm the event was queued successfully
+
 ```
 docker logs game_event_api
 ```
+
 Check the logs of the worker container to confirm the event was processed and stored:
+
 ```
 docker logs game_event_worker
 ```
