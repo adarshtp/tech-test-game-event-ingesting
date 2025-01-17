@@ -1,15 +1,16 @@
 // worker.js - RabbitMQ Worker for Event Processing
 
 const amqp = require('amqplib');
-const { GameEvent } = require('../db/db_config');
+const { connectToDatabase, GameEvent } = require('../db/db_config');
 
-const RABBITMQ_URL = 'amqp://localhost';
-const QUEUE_NAME = 'game_events';
-const BATCH_SIZE = 10;
-const RETRY_LIMIT = 3;
+const RABBITMQ_URL = `amqp://${process.env.RABBITMQ_HOST}:${process.env.RABBITMQ_PORT}`;
+const QUEUE_NAME = process.env.RABBITMQ_QUEUE;
+const BATCH_SIZE = process.env.BATCH_SIZE;
+const RETRY_LIMIT = process.env.RETRY_LIMIT;
 
 async function startWorker() {
     try {
+        await connectToDatabase();
         const connection = await amqp.connect(RABBITMQ_URL);
         const channel = await connection.createChannel();
         await channel.assertQueue(QUEUE_NAME);
@@ -83,3 +84,7 @@ async function processBatch(messages, channel) {
 module.exports = {
     startWorker
 };
+
+if (require.main === module) {
+    startWorker();
+}
